@@ -1,12 +1,20 @@
 // Function to fetch news from NewsAPI
 async function fetchNewsData(endpoint, params) {
     try {
-        let url = `${BASE_URL}${endpoint}?apiKey=${API_KEY}&language=en`;
+        let url;
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        
+        if (isLocalhost) {
+            url = `${BASE_URL}${endpoint}?apiKey=${API_KEY}&language=en`;
+        } else {
+            url = `/api/news?endpoint=${endpoint}`;
+        }
         
         // Add extra parameters like category or search query
         for (let key in params) {
             url += `&${key}=${params[key]}`;
         }
+
 
         const response = await fetch(url);
         const data = await response.json();
